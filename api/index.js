@@ -41,7 +41,7 @@ const checkValidatorStatus = async (epoch) => {
 
                         console.log(
                             "Validator with index " +
-                            validator.index + " was offline in epoch " +
+                            validator.index + " is offline in epoch " +
                             epoch
                         );
                     }
@@ -82,7 +82,8 @@ const sendTelegram = (chatId, index, epoch) => {
     bot.sendMessage(
         chatId,
         "Your validator with index " + index +
-        " was offline in epoch " + epoch
+        " is offline in current epoch " + epoch +
+        ". Kindly restart your validator to continue earning."
     );
 }
 
@@ -103,7 +104,7 @@ const sendEmail = async (reciever, index, epoch) => {
         subject: "Validator Down ✘",
         html: "<p>Hello,<p>" +
             "<p> Your validator with index " + index +
-            " was <strong>inactive</strong> in last epoch <strong>" +
+            " is <strong>offline</strong> in current epoch <strong>" +
             epoch + "<strong>.</p>" +
             "<p>Kindly restart your validator to continue earning.</p>" +
             "<br>" +
