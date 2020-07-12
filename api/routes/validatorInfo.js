@@ -16,10 +16,10 @@ const {
 // @access  Public
 router.get("/", getAllValidators);
 
-// @route   GET api/v1/validator/:index
+// @route   GET api/v1/validator/index/:index/email/:email
 // @desc    Get Validator using index
 // @access  Public
-router.get("/:index", getValidator);
+router.get("/index/:index/email/:email", getValidator);
 
 // @route   POST api/v1/validator/
 // @desc    Add New Validator
@@ -38,6 +38,7 @@ router.post("/",
 router.delete("/",
     [
         check("index").not().isEmpty(),
+        check("email").not().isEmpty(),
     ],
     deleteValidator,
 );

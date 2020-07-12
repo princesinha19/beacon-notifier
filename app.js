@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require("mongoose");
 const validatorRoute = require('./api/routes/validatorInfo');
-require('./api/index');
 require("dotenv").config();
+require('./api/index');
 
 const app = express();
 

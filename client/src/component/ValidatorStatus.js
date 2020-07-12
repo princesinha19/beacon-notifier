@@ -51,8 +51,9 @@ export default function ValidatorStatus() {
     const handleAddValidator = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:9000/validator/" +
-                validatorInfo.index
+                "http://localhost:9000/validator/index/" +
+                validatorInfo.index +
+                "/email/" + validatorInfo.email
             );
 
             if (res.data.result.length === 0) {
@@ -94,15 +95,17 @@ export default function ValidatorStatus() {
     const handleRemoveValidator = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:9000/validator/" +
-                validatorInfo.index
+                "http://localhost:9000/validator/index/" +
+                validatorInfo.index +
+                "/email/" + validatorInfo.email
             );
 
             if (res.data.result.length > 0) {
                 axios.delete
                     ("http://localhost:9000/validator", {
                         data: {
-                            index: validatorInfo.index
+                            email: validatorInfo.email,
+                            index: validatorInfo.index,
                         }
                     })
                     .then((_) => {
@@ -228,25 +231,22 @@ export default function ValidatorStatus() {
                         </Col>
                     </Row>
 
-                    {subscribe ?
-                        <Row>
-                            <Col>
-                                <Form.Label className="bold">Email Address</Form.Label>
-                                <Form.Control
-                                    className="mb-4"
-                                    type="email"
-                                    placeholder="Your email address (Eg. abc@gmail.com)"
-                                    onChange={(e) => setValidatorInfo({
-                                        ...validatorInfo,
-                                        email: e.target.value
-                                    })}
-                                    value={validatorInfo.email}
-                                    required
-                                />
-                            </Col>
-                        </Row>
-                        : null
-                    }
+                    <Row>
+                        <Col>
+                            <Form.Label className="bold">Email Address</Form.Label>
+                            <Form.Control
+                                className="mb-4"
+                                type="email"
+                                placeholder="Your email address (Eg. abc@gmail.com)"
+                                onChange={(e) => setValidatorInfo({
+                                    ...validatorInfo,
+                                    email: e.target.value
+                                })}
+                                value={validatorInfo.email}
+                                required
+                            />
+                        </Col>
+                    </Row>
                 </Card.Body>
 
                 <Card.Footer className="text-center">

@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const ValidatorInfo = require("../models/ValidatorInfo");
+const { response } = require("../../app");
 
 // @route   GET api/v1/validator
 // @desc    Get All validators
@@ -22,11 +23,19 @@ const getAllValidators = async (req, res) => {
         });
 };
 
-// @route   GET api/v1/validator/:index
+// @route   GET api/v1/validator/index/:index/email/:email
 // @desc    Get Validator using index
 // @access  Public
 const getValidator = async (req, res) => {
-    ValidatorInfo.find({ index: req.params.index })
+    ValidatorInfo.find
+        (
+            {
+                $and: [
+                    { email: req.params.email },
+                    { index: req.params.index },
+                ]
+            }
+        )
         .then((validator) => {
             res.status(200)
                 .json({
@@ -49,11 +58,10 @@ const getValidator = async (req, res) => {
 const addValidator = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors)
         res.status(422)
             .json({
                 success: false,
-                error: "Index and email should not be empty.",
+                error: "Both index and email are required !!",
             });
     }
 
@@ -62,17 +70,17 @@ const addValidator = async (req, res) => {
         index,
     } = req.body;
 
-    const newVerifiedAddress = new ValidatorInfo({
+    const newValidator = new ValidatorInfo({
         email,
         index,
     });
 
-    newVerifiedAddress.save()
+    newValidator.save()
         .then(() => {
             res.json({
                 success: true,
                 msg: "Validator added successfully !!",
-                data: newVerifiedAddress,
+                data: newValidator,
             })
         })
         .catch((error) => {
@@ -93,14 +101,19 @@ const deleteValidator = async (req, res) => {
         res.status(422)
             .json({
                 success: false,
-                error: "Index should not be empty.",
+                error: "Both index and email are required !!",
             });
     }
 
     ValidatorInfo.deleteOne
-        ({
-            index: req.body.index,
-        })
+        (
+            {
+                $and: [
+                    { email: req.body.email },
+                    { index: req.body.index },
+                ]
+            }
+        )
         .then((result) => {
             res.json({
                 success: true,
