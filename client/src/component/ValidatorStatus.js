@@ -14,6 +14,7 @@ export default function ValidatorStatus() {
     const [successModal, setSuccessModal] = useState({ msg: "", open: false });
     const [errorModal, setErrorModal] = useState({ msg: "", open: false });
     const [subscribe, setSubscribe] = useState(true);
+    const [showStatus, setShowStatus] = useState(false);
     const [validatorInfo, setValidatorInfo] = useState({
         email: "",
         index: "",
@@ -26,10 +27,17 @@ export default function ValidatorStatus() {
     });
 
     const validateForm = () => {
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
         if (!validatorInfo.index) {
             setErrorModal({
                 open: true,
                 msg: "Public Key must be of 98 characters !!",
+            });
+        } else if (!regex.test(validatorInfo.email)) {
+            setErrorModal({
+                open: true,
+                msg: "Invalid email address !!",
             });
         } else {
             if (subscribe) {
@@ -138,12 +146,13 @@ export default function ValidatorStatus() {
                 setValidatorStatus({
                     status: result.data.statuses[0].status,
                     slashed: (res.data.slashed).toString().toUpperCase(),
-                    balance: res.data.effectiveBalance,
+                    balance: res.data.effectiveBalance.slice(0, -9) + " ETH",
                     activationEpoch: res.data.activationEpoch,
-                })
+                });
+
+                setShowStatus(true);
             })
             .catch((error) => {
-                console.log(error)
                 setErrorModal({
                     open: true,
                     msg: error.message,
@@ -152,6 +161,13 @@ export default function ValidatorStatus() {
     }
 
     const handleClearStatus = () => {
+        setShowStatus(false);
+
+        setValidatorInfo({
+            ...validatorInfo,
+            index: ""
+        });
+
         setValidatorStatus({
             status: "",
             slashed: "",
@@ -166,11 +182,8 @@ export default function ValidatorStatus() {
 
     return (
         <div style={{ width: "100%" }}>
-            <Card
-                className="mx-auto"
-                style={{ width: "50%", marginTop: "5%" }}
-            >
-                <Card.Header style={{ fontSize: "2rem", textAlign: "center" }}>
+            <Card className="mx-auto form-card ">
+                <Card.Header style={{ fontSize: "2rem" }}>
                     BEACON ALERT
                 </Card.Header>
 
@@ -255,17 +268,14 @@ export default function ValidatorStatus() {
                 </Card.Footer>
             </Card>
 
-            <Card
-                className="mx-auto"
-                style={{ width: "80%", marginTop: "4%" }}
-            >
-                <Card.Header style={{ fontSize: "1.5rem", textAlign: "center" }}>
+            <Card className="mx-auto status-card">
+                <Card.Header style={{ fontSize: "1.5rem" }}>
                     VALIDATOR CURRENT STATUS
                 </Card.Header>
 
                 <Card.Body>
-                    <Row>
-                        <Col>
+                    {!showStatus ?
+                        <Row className="status-input">
                             <Form.Control
                                 className="mb-4 mx-auto"
                                 type="number"
@@ -278,28 +288,44 @@ export default function ValidatorStatus() {
                                 value={validatorInfo.index}
                                 required
                             />
-                        </Col>
-                    </Row>
-
-                    <CardDeck style={{ textAlign: "center" }}>
-                        <Card>
-                            <Card.Header>Status</Card.Header>
-                            <Card.Body>{validatorStatus.status}</Card.Body>
-                        </Card>
-                        <Card>
-                            <Card.Header>Slashed</Card.Header>
-                            <Card.Body>{validatorStatus.slashed}</Card.Body>
-                        </Card>
-                        <Card>
-                            <Card.Header>Balance</Card.Header>
-                            <Card.Body>{validatorStatus.balance}</Card.Body>
-                        </Card>
-                        <Card>
-                            <Card.Header>Activation Epoch</Card.Header>
-                            <Card.Body>{validatorStatus.activationEpoch}</Card.Body>
-                        </Card>
-                    </CardDeck>
+                        </Row>
+                        :
+                        <CardDeck>
+                            <Card>
+                                <Card.Header>Status</Card.Header>
+                                {validatorStatus.status === "ACTIVE"
+                                    ?
+                                    <Card.Body className="active-status">
+                                        {validatorStatus.status}
+                                    </Card.Body>
+                                    : (validatorStatus.status === "EXITED"
+                                        ?
+                                        <Card.Body className="inactive-status">
+                                            {validatorStatus.status}
+                                        </Card.Body>
+                                        :
+                                        <Card.Body className="pending-status">
+                                            {validatorStatus.status}
+                                        </Card.Body>
+                                    )
+                                }
+                            </Card>
+                            <Card>
+                                <Card.Header>Slashed</Card.Header>
+                                <Card.Body>{validatorStatus.slashed}</Card.Body>
+                            </Card>
+                            <Card>
+                                <Card.Header>Balance</Card.Header>
+                                <Card.Body>{validatorStatus.balance}</Card.Body>
+                            </Card>
+                            <Card>
+                                <Card.Header>Activation Epoch</Card.Header>
+                                <Card.Body>{validatorStatus.activationEpoch}</Card.Body>
+                            </Card>
+                        </CardDeck>
+                    }
                 </Card.Body>
+
                 <Card.Footer>
                     <Button
                         variant="info"
@@ -307,7 +333,6 @@ export default function ValidatorStatus() {
                     >
                         GET
                     </Button>
-
 
                     <Button
                         variant="warning"

@@ -60,8 +60,20 @@ const sendEmail = async (reciever, index, epoch) => {
         from: '"Beacon Notifier 👻" <beacon.notifier@gmail.com>',
         to: reciever,
         subject: "Validator Down ✘",
-        html: "<p>Hello your validator is <strong>inactive.</strong></p>" +
-            "<p><img src='&lt;source&gt;' alt='Alert image' /></p>",
+        html: "<p>Hello,<p>" +
+            "<p> Your validator with index " + index +
+            " was <strong>inactive</strong> in last epoch <strong>" +
+            epoch + "<strong>.</p>" +
+            "<p>Kindly restart your validator to continue earning.</p>" +
+            "<br>" +
+            "<p><img " +
+            "src='https://lh3.googleusercontent.com/proxy/FHchhdZf5ZBhZsjTaE30IgAhcJMFxpkezNHxaO6DEV4jwFb_NDkDQhu5rnEN-qEs2TZe0_JBI1V33tYV4JGH_wRckK6n8xQh6scvtkIett2uCNTOVkAdf3UpXVyswfM'" +
+            "alt='Alert image' " +
+            "style='width:220px;height:200px;'" +
+            "/></p>" +
+            "<br>" +
+            "<p>Regards</p>" +
+            "<p>Beacon Notifier 👻</p>"
     });
 
     console.log("Message sent: %s", info.messageId);

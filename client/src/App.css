@@ -43,3 +43,41 @@
   display: inline;
   border-top: 0;
 }
+
+.card-header {
+  text-align: center;
+}
+
+.card-deck {
+  text-align: center;
+}
+
+.form-card {
+  width: 50%;
+  margin-top: 5%;
+}
+
+.status-card {
+  width: 75%;
+  margin-top: 4%;
+}
+
+.status-input {
+  margin-top: 3%;
+  margin-bottom: 1%;
+}
+
+.active-status {
+  color: green;
+  font-weight: bold;
+}
+
+.inactive-status {
+  color: red;
+  font-weight: bold;
+}
+
+.pending-status {
+  color: grey;
+  font-weight: bold;
+}
