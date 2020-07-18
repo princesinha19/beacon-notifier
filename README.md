@@ -12,6 +12,9 @@ Anytime you can unsubscribe using any service either web form or telegram bot. B
 Their is an additional service on web app, to check the validaor status using Validator Index.
 The status shows the current status of the validator with the staked balance, activation epoch and slashing info.
 
+## Demo (Video)
+[![asciicast](https://img.youtube.com/vi/nM_FMuRo39s/0.jpg)](https://youtu.be/nM_FMuRo39s) 
+
 ## Steps to run project
 1. Clone the repository
 2. Go inside the directory and install all dependencies using NPM.
